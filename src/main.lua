@@ -1,8 +1,14 @@
+Core = require("game.core")
+Settings = require("game.settings")
+UI = require("game.ui")
+-- Sprites
+Player = require("sprites.player")
+Enemy = require("sprites.enemy")
+CF = require("sprites.centerFrame")
 
-World = love.physics.newWorld(0, 0, true)
 
 function love.load()
-
+    Core.load()
 end
 
 function love.update(dt)
