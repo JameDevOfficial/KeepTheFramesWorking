@@ -19,6 +19,10 @@ function love.draw()
 
 end
 
+function love.resize()
+    Core.screen = UI.windowResized()
+end
+
 function love.keypressed(key, scancode, isrepeat)
 
 end
