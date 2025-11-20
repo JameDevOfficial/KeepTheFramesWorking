@@ -4,7 +4,6 @@ EXITED = -1
 PAUSED = 0
 LOADING = 1
 -- Below are all fine during game
-RUNNING = 10
 INMENU = 11
 INGAME = 12
 
@@ -21,8 +20,16 @@ Core.load = function()
     Core.status = INMENU
 end
 
-Core.update = function()
+Core.update = function(dt)
 
+end
+
+Core.keypressed = function(key, scancode, isrepeat)
+    if Core.status == INMENU then
+        if key == "return" then
+            Core.status = INGAME
+        end
+    end
 end
 
 

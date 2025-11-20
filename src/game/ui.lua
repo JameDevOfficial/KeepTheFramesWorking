@@ -13,7 +13,11 @@ font30:setFilter("nearest", "nearest")
 font50:setFilter("nearest", "nearest")
 
 UI.draw = function()
-    UI.drawMenu()
+    if Core.status == INMENU then
+        UI.drawMenu()
+    elseif Core.status == INGAME then
+        UI.drawGame()
+    end
 end
 
 UI.drawGame = function()
@@ -25,14 +29,14 @@ UI.drawMenu = function()
     love.graphics.setFont(titleFont)
     local text = "Keep the Frames working"
     local width = titleFont:getWidth(text)
-    love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 300)
+    love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 200)
 
     text = string.format("Points: %03d", Player.points)
     love.graphics.setFont(textFont)
     love.graphics.setColor(1, 1, 1)
     width = textFont:getWidth(text)
     local height = textFont:getHeight()
-    love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 200)
+    love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 100)
 
     text = "Press 'enter' to start"
     love.graphics.setFont(textFont)

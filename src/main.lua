@@ -24,7 +24,7 @@ function love.resize()
 end
 
 function love.keypressed(key, scancode, isrepeat)
-
+    Core.keypressed(key,scancode,isrepeat)
 end
 
 function love.keyreleased(key, scancode)
