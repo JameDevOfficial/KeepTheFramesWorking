@@ -12,11 +12,11 @@ function love.load()
 end
 
 function love.update(dt)
-
+    Core.update(dt)
 end
 
 function love.draw()
-
+    UI.draw()
 end
 
 function love.resize()

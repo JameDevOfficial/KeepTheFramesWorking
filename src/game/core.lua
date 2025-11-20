@@ -14,11 +14,15 @@ end
 
 Core.load = function()
     Core.status = LOADING
-    
+
     World = love.physics.newWorld(0, 0, true)
     Core.screen = UI.windowResized()
 
     Core.status = INMENU
+end
+
+Core.update = function()
+
 end
 
 

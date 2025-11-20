@@ -1,5 +1,47 @@
 local UI = {}
 
+local fontDefault = love.graphics.newFont(20)
+local font30 = love.graphics.newFont(30)
+local font50 = love.graphics.newFont(50)
+local titleFont = love.graphics.newFont(Settings.fonts.quirkyRobot, 128, "normal", love.graphics.getDPIScale())
+local textFont = love.graphics.newFont(Settings.fonts.semiCoder, 32, "normal", love.graphics.getDPIScale())
+
+titleFont:setFilter("nearest", "nearest")
+textFont:setFilter("nearest", "nearest")
+fontDefault:setFilter("nearest", "nearest")
+font30:setFilter("nearest", "nearest")
+font50:setFilter("nearest", "nearest")
+
+UI.draw = function()
+    UI.drawMenu()
+end
+
+UI.drawGame = function()
+
+end
+
+UI.drawMenu = function()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(titleFont)
+    local text = "Keep the Frames working"
+    local width = titleFont:getWidth(text)
+    love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 300)
+
+    text = string.format("Points: %03d", Player.points)
+    love.graphics.setFont(textFont)
+    love.graphics.setColor(1, 1, 1)
+    width = textFont:getWidth(text)
+    local height = textFont:getHeight()
+    love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 200)
+
+    text = "Press 'enter' to start"
+    love.graphics.setFont(textFont)
+    love.graphics.setColor(1, 1, 1)
+    width = textFont:getWidth(text)
+    local height = textFont:getHeight()
+    love.graphics.print(text, (Core.screen.X - width) / 2, (Core.screen.centerY - height) * 2)
+end
+
 UI.windowResized = function()
     local screen = {
         X = 0,
