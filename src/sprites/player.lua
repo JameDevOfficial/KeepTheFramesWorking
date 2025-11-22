@@ -38,7 +38,14 @@ function player:followMouse(dt)
     local cx, cy = self.body:getPosition()
     local dx, dy = mx - cx, my - cy
     local angle = math.atan2(dy, dx)
-    self.body:setAngle(angle)
+    local oldAngle = self.body:getAngle()
+
+    local diff = angle - oldAngle
+    diff = (diff + math.pi) % (2 * math.pi) - math.pi
+
+    local speed = 4
+    local newAngle = oldAngle + diff * math.min(dt * speed, 1)
+    self.body:setAngle(newAngle)
 end
 
 function player:checkMovement(dt)
