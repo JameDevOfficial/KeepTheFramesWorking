@@ -13,6 +13,31 @@ font30:setFilter("nearest", "nearest")
 font50:setFilter("nearest", "nearest")
 
 UI.draw = function()
+    --Core.player:render()
+    Core.centerFrame:render()
+
+    -- FPS Label
+    local fps = love.timer.getFPS()
+    if fps < 1 / love.timer.getAverageDelta() then
+        love.graphics.setColor(1, 0.4, 0.4)
+    elseif fps > 1 / love.timer.getAverageDelta() then
+        love.graphics.setColor(0.4, 1, 0.4)
+    else
+        love.graphics.setColor(1, 1, 1, 1)
+    end
+    local text = string.format("FPS: %03d", love.timer.getFPS())
+    local x, y = Core.screen.X - textFont:getWidth(text) - 10, 10
+    love.graphics.print(text, x, y)
+
+    -- Time Label
+    love.graphics.setColor(1, 1, 1)
+    local minutes = math.floor(Player.points / 60)
+    local seconds = Player.points - minutes * 60
+    text = string.format("%02d:%02d", minutes, seconds)
+    local x, y = Core.screen.X - textFont:getWidth(text) - 10, textFont:getHeight() + 10
+    love.graphics.print(text, x, y)
+
+    -- Frame specific
     if Core.status == INMENU then
         UI.drawMenu()
     elseif Core.status == INGAME then
@@ -31,7 +56,9 @@ UI.drawMenu = function()
     local width = titleFont:getWidth(text)
     love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 200)
 
-    text = string.format("Points: %03d", Player.points)
+    local minutes = math.floor(Player.points / 60)
+    local seconds = Player.points - minutes * 60
+    text = string.format("Survived: %02d:%02d min", minutes, seconds)
     love.graphics.setFont(textFont)
     love.graphics.setColor(1, 1, 1)
     width = textFont:getWidth(text)

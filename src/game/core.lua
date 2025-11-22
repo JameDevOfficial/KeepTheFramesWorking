@@ -8,20 +8,26 @@ INMENU = 11
 INGAME = 12
 
 Core.reset = function()
-    -- to be impleneted 
+    -- to be impleneted
 end
 
 Core.load = function()
     Core.status = LOADING
 
-    World = love.physics.newWorld(0, 0, true)
+    Core.world = love.physics.newWorld(0, 0, true)
     Core.screen = UI.windowResized()
+    Core.player = Player:new({ color = { 1, 0.4, 1 }, world = Core.world })
+    Core.centerFrame = CF:new({ world = Core.world })
 
     Core.status = INMENU
 end
 
 Core.update = function(dt)
-
+    Core.centerFrame:update(dt)
+    
+    if Core.status == INGAME then
+        Player.points = Player.points + dt
+    end
 end
 
 Core.keypressed = function(key, scancode, isrepeat)
