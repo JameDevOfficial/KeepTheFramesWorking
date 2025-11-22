@@ -68,15 +68,7 @@ function M:render()
     love.graphics.rotate(self.body:getAngle())
     love.graphics.setColor(self.color)
     love.graphics.setLineWidth(2)
-
     love.graphics.draw(self.mesh, 0, 0, self.body:getAngle())
-    love.graphics.setColor(1, 0, 0, 1)
-    love.graphics.circle("fill", 0, 0, 5)
-    if Settings.DEBUG then
-        love.graphics.setColor(1, 0, 0, 1)
-        love.graphics.line(0, 0, 30, 0)
-    end
-
     love.graphics.pop()
 end
 

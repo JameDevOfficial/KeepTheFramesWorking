@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "core",
         "ui",
-        "centerFrame"
+        "centerFrame",
+        "player"
     ]
 }
