@@ -15,7 +15,6 @@ M.fonts.quirkyRobot = "assets/fonts/QuirkyRobot.ttf"
 M.fonts.semiCoder = "assets/fonts/SemiCoder.otf"
 
 M.collision = {}
-M.collision.player = 1
 M.collision.enemy = 2
 M.collision.projectile = 4
 return M;

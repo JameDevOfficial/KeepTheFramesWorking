@@ -18,12 +18,10 @@ function player:new(opts)
     local h_2     = o.size.h / 2
 
     o.shape       = {
-        w_2 / 2, -h_2 / 3,
-        w_2 * 2, -h_2 / 5,
-        w_2 * 2, h_2 / 5,
-        w_2 / 2, h_2 / 3,
-        0, h_2 / 2,
-        0, -h_2 / 2,
+        0, -h_2 / 3,
+        w_2 * 1.8, -h_2 / 5,
+        w_2 * 1.8, h_2 / 5,
+        0, h_2 / 3,
     }
 
     if opts.world then
@@ -90,7 +88,7 @@ function player:render()
     love.graphics.polygon("fill", self.shape)
     if Settings.DEBUG then
         love.graphics.setColor(1, 0, 0, 1)
-        love.graphics.line(0, 0, 30, 0)
+        love.graphics.line(0, 0, 1000, 0)
     end
 
     love.graphics.pop()
