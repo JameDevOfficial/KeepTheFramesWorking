@@ -51,7 +51,7 @@ function M:new(opts)
 end
 
 function M:update(dt)
-    self.body:setAngle(self.body:getAngle() + self.rotationSpeed)
+    self.body:setAngle(self.body:getAngle() + self.rotationSpeed * dt)
 
     local speed = self.colorChangeSpeed * dt
     self.gradientDirection = self.gradientDirection + speed
