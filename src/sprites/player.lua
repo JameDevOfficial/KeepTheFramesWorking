@@ -10,7 +10,7 @@ function player:new(opts)
     o.color       = opts.color or { 1, 1, 1, 1 }
     o.position    = opts.position or { x = Core.screen.centerX, y = Core.screen.centerY }
     o.damping     = opts.damping or 0.5
-    o.rotation    = opts.rotation or -math.pi / 2
+    o.rotation    = opts.rotation or 0
     o.offset      = opts.offset or { x = 0, y = 0 }
     o.projectiles = {}
 
@@ -18,10 +18,12 @@ function player:new(opts)
     local h_2     = o.size.h / 2
 
     o.shape       = {
-        w_2, 0,
-        -w_2, -h_2,
-        -(o.size.w / 4), 0,
-        -w_2, h_2
+        w_2 / 2, -h_2 / 3,
+        w_2 * 2, -h_2 / 5,
+        w_2 * 2, h_2 / 5,
+        w_2 / 2, h_2 / 3,
+        0, h_2 / 2,
+        0, -h_2 / 2,
     }
 
     if opts.world then
@@ -82,7 +84,7 @@ end
 function player:render()
     love.graphics.push();
     love.graphics.setLineWidth(2)
-    love.graphics.translate(self.body:getX(), self.body:getY())
+    love.graphics.translate(self.body:getX() + self.offset.x, self.body:getY() + self.offset.y)
     love.graphics.rotate(self.body:getAngle())
     love.graphics.setColor(self.color)
     love.graphics.polygon("fill", self.shape)
@@ -124,7 +126,6 @@ function player:update(dt)
             end
         end
     end
-
 end
 
 function player:rotate(amount)

@@ -16,7 +16,7 @@ Core.load = function()
 
     Core.world = love.physics.newWorld(0, 0, true)
     Core.screen = UI.windowResized()
-    Core.player = Player:new({ color = { 1, 0.4, 1 }, world = Core.world })
+    Core.player = Player:new({ color = Settings.player.color, world = Core.world })
     Core.centerFrame = CF:new({ world = Core.world })
 
     Core.status = INMENU

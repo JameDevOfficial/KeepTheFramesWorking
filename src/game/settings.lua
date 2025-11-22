@@ -4,7 +4,7 @@ M.DEBUG = true
 
 M.player = {}
 M.player.size = { w = 50, h = 50 }
-M.player.color = { 0.5, 1, 1 }
+M.player.color = { 1, 1, 1 }
 M.player.screenPadding = 25
 M.player.projectileSpeed = 100000 -- in pixels, when to make it teleport
 M.player.startLives = 3

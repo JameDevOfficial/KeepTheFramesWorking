@@ -13,8 +13,8 @@ font30:setFilter("nearest", "nearest")
 font50:setFilter("nearest", "nearest")
 
 UI.draw = function()
-    Core.centerFrame:render()
     Core.player:render()
+    Core.centerFrame:render()
 
     -- FPS Label
     local fps = love.timer.getFPS()
