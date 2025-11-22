@@ -27,6 +27,10 @@ function love.keypressed(key, scancode, isrepeat)
     Core.keypressed(key,scancode,isrepeat)
 end
 
+function love.mousepressed(x, y, button, istouch, presses)
+    Core.mousepressed(x, y, button, istouch, presses)
+end
+
 function love.keyreleased(key, scancode)
 
 end

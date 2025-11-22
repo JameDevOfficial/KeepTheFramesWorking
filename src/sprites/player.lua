@@ -1,3 +1,4 @@
+---@diagnostic disable: deprecated
 local player = {}
 player.__index = player
 player.points = 0
@@ -27,10 +28,17 @@ function player:new(opts)
     if opts.world then
         o.body = love.physics.newBody(opts.world, o.position.x, o.position.y, "dynamic")
         o.body:setLinearDamping(o.damping)
-        ---@diagnostic disable-next-line: deprecated
         o.body:setAngle(o.rotation)
     end
     return o
+end
+
+function player:followMouse(dt)
+    local mx, my = love.mouse.getPosition()
+    local cx, cy = self.body:getPosition()
+    local dx, dy = mx - cx, my - cy
+    local angle = math.atan2(dy, dx)
+    self.body:setAngle(angle)
 end
 
 function player:checkMovement(dt)
@@ -112,7 +120,7 @@ function player:destroy()
 end
 
 function player:update(dt)
-    Core.player:checkMovement(dt)
+    Core.player:followMouse(dt)
 
     for i = #self.projectiles, 1, -1 do
         local p = self.projectiles[i]

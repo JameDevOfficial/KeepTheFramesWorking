@@ -43,11 +43,14 @@ Core.keypressed = function(key, scancode, isrepeat)
         end
     end
     if Core.status == INGAME then
-        local dt = love.timer.getDelta()
-
         if key == "space" then
             Core.player:shoot(love.timer.getDelta())
         end
+    end
+end
+Core.mousepressed = function(x, y, button, istouch, presses)
+    if Core.status == INGAME then
+        Core.player:shoot(love.timer.getDelta())
     end
 end
 
