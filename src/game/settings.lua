@@ -10,6 +10,9 @@ M.player.projectileSpeed = 100000 -- in pixels, when to make it teleport
 M.player.startLives = 3
 M.player.safeTime = 3             -- s
 
+M.centerFrame = {}
+M.centerFrame.size = {w = 40, h = 40}
+
 M.fonts = {}
 M.fonts.quirkyRobot = "assets/fonts/QuirkyRobot.ttf"
 M.fonts.semiCoder = "assets/fonts/SemiCoder.otf"

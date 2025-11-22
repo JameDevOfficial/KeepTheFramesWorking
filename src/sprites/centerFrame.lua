@@ -24,7 +24,7 @@ function M:new(opts)
     opts                = opts or {}
     local o             = setmetatable({}, self)
     o.type              = "centerFrame"
-    o.size              = opts.size or Settings.player.size
+    o.size              = opts.size or Settings.centerFrame.size
     o.color             = opts.color or { 1, 1, 1, 1 }
     o.position          = opts.position or { x = Core.screen.centerX, y = Core.screen.centerY }
     o.rotation          = opts.rotation or 0
@@ -59,6 +59,12 @@ function M:update(dt)
     self.color[1] = 0.5 + 0.5 * math.sin(self.gradientDirection)
     self.color[2] = 0.5 + 0.5 * math.sin(self.gradientDirection + 2 * math.pi / 3)
     self.color[3] = 0.5 + 0.5 * math.sin(self.gradientDirection + 4 * math.pi / 3)
+
+    local mx, my = love.mouse.getPosition()
+    local cx, cy = self.body:getPosition()
+    local dx, dy = mx - cx, my - cy
+    local r = math.sqrt(dx * dx + dy * dy)
+    self.scale = (r / math.max(Core.screen.X, Core.screen.Y)) * 2 + 1
 end
 
 function M:render()
@@ -68,7 +74,10 @@ function M:render()
     love.graphics.rotate(self.body:getAngle())
     love.graphics.setColor(self.color)
     love.graphics.setLineWidth(2)
-    love.graphics.draw(self.mesh, 0, 0, self.body:getAngle())
+    local meshCenterX = 0
+    local meshCenterY = 0
+    local scale = self.scale or 1.5 -- Increase scale, default to 1.5 if not set
+    love.graphics.draw(self.mesh, meshCenterX, meshCenterY, 0, scale, scale)
     love.graphics.pop()
 end
 
