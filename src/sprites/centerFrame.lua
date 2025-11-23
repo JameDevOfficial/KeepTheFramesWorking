@@ -55,6 +55,7 @@ function M:new(opts)
 end
 
 function M:update(dt)
+    if not self.body then return end
     if self.collisionHappened then
         self.sleepPerSecond = self.sleepPerSecond + Settings.centerFrame.sleepStep
         self.collisionHappened = false
@@ -87,6 +88,7 @@ function M:update(dt)
 end
 
 function M:render()
+    if not self.body then return end
     love.graphics.push();
     love.graphics.setLineWidth(2)
     love.graphics.translate(self.body:getX(), self.body:getY())
@@ -98,6 +100,23 @@ function M:render()
     local scale = self.scale or 1.5 -- Increase scale, default to 1.5 if not set
     love.graphics.draw(self.mesh, meshCenterX, meshCenterY, 0, scale, scale)
     love.graphics.pop()
+end
+
+function M:destroy()
+    if self.fixture then
+        pcall(function()
+            self.fixture:setUserData(nil)
+            self.fixture:destroy()
+        end)
+        self.fixture = nil
+    end
+    if self.body then
+        pcall(function()
+            self.body:destroy()
+        end)
+        self.body = nil
+    end
+    self.mesh = nil
 end
 
 return M

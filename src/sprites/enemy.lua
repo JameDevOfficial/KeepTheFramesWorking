@@ -14,11 +14,13 @@ local enemyFonts = {
 }
 
 function M:new(opts)
-    opts    = opts or {}
-    local o = setmetatable({}, self)
-    o.type  = "enemy"
-    o.scale = opts.scale or math.random(1, 8)
-    o.color = opts.color or { 0.7, 1, 0.7, 1 }
+    opts             = opts or {}
+    local o          = setmetatable({}, self)
+    o.type           = "enemy"
+    o.scale          = opts.scale or math.random(1, 8)
+    local brightness = opts.brightness or 1
+    local saturation = math.random(10, 70) / 100
+    o.color          = opts.color or { saturation, 1, saturation, brightness }
     if not opts.position then
         local randPos = math.random(1, 2)
         if randPos == 1 then
@@ -59,7 +61,7 @@ function M:new(opts)
         o.fixture = love.physics.newFixture(o.body, o.shape)
         o.fixture:setUserData(o)
         o.fixture:setFilterData(Settings.collision.enemy, Settings.collision.projectile + Settings.collision.centerFrame,
-        0)
+            0)
     end
     return o
 end
@@ -96,6 +98,13 @@ function M:handleCollision()
 end
 
 function M:destroy()
+    if self.fixture then
+        pcall(function()
+            self.fixture:setUserData(nil)
+            self.fixture:destroy()
+        end)
+        self.fixture = nil
+    end
     if self.collision then
         self.collision:destroy()
         self.collision = nil
@@ -115,15 +124,18 @@ function M:destroy()
     end
 end
 
-function M:spawnRandom(dt)
-    self.spawnTimer = self.spawnTimer and self.spawnTimer + dt or 0 + dt
-    if self.spawnTimer < Settings.enemy.spawnDelay / (math.floor(Player.points / Settings.enemy.harderDelay) + 1) then
+local spawnTimer = 0
+function M:spawnRandom(dt, spawnDelay, brightness)
+    local spawnDelay = spawnDelay or Settings.enemy.spawnDelay
+    local bright = brightness or nil
+    spawnTimer = spawnTimer and spawnTimer + dt or 0 + dt
+    if spawnTimer < spawnDelay / (math.floor(Player.points / Settings.enemy.harderDelay) + 1) then
         return
     end
-    self.spawnTimer = 0
+    spawnTimer = 0
     local spawn = math.random(1, 100) > Settings.enemy.spawnChance
     if not spawn then return end
-    return M:new({ world = Core.world })
+    return M:new({ world = Core.world, brightness = bright })
 end
 
 return M

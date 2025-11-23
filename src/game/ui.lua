@@ -16,6 +16,7 @@ font50:setFilter("nearest", "nearest")
 UI.draw = function()
     Core.player:render()
     Core.centerFrame:render()
+    UI.drawGame()
     love.graphics.setFont(textFont)
     -- FPS Label
     local fps = love.timer.getFPS()
@@ -41,8 +42,6 @@ UI.draw = function()
     -- Frame specific
     if Core.status == INMENU then
         UI.drawMenu()
-    elseif Core.status == INGAME then
-        UI.drawGame()
     elseif Core.status == INHELP then
         UI.drawHelp()
     end

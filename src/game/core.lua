@@ -15,8 +15,23 @@ Core.reset = function()
         e:destroy()
     end
     Core.enemies = {}
+    Core.world:destroy()
     Core.player:destroyProjectiles()
+    if Core.player and Core.player.body then
+        pcall(function() Core.player.body:destroy() end)
+        Core.player = nil
+    end
+    if Core.centerFrame and Core.centerFrame.destroy then
+        Core.centerFrame:destroy()
+        Core.centerFrame = nil
+    end
+
     math.randomseed(os.time())
+    Core.world = love.physics.newWorld(0, 0, true)
+    Core.world:setCallbacks(Core.beginContact, Core.endContact, Core.preSolve, Core.postSolve)
+    Core.screen = UI.windowResized()
+    Core.player = Player:new({ color = Settings.player.color, world = Core.world })
+    Core.centerFrame = CF:new({ world = Core.world })
 end
 
 Core.load = function()
@@ -51,6 +66,13 @@ Core.update = function(dt)
             e:update()
         end
     end
+    if Core.status == INMENU or Core.status == INHELP then
+        local enemy = Enemy:spawnRandom(dt, 0.1, 0.4)
+        if enemy then table.insert(Core.enemies, enemy) end
+        for i, e in ipairs(Core.enemies) do
+            e:update()
+        end
+    end
 end
 
 Core.keypressed = function(key, scancode, isrepeat)
@@ -63,6 +85,7 @@ Core.keypressed = function(key, scancode, isrepeat)
     end
     if Core.status == INMENU then
         if key == "return" then
+            Core.reset()
             Core.status = INGAME
         end
         if key == "h" or key == "H" then
@@ -110,12 +133,12 @@ function Core.beginContact(a, b, coll)
     if (t1 == "centerFrame" and t2 == "enemy") or
         (t2 == "centerFrame" and t1 == "enemy") then
         --print("Collision type 2")
-        if u1.type == "centerFrame" then
+        if u1.type == "centerFrame" and Core.status == INGAME then
             u1.collisionHappened = true
-            -- print("encenterFrameemy found and coll set to true")
-        elseif u2.type == "centerFrame" then
+            print("encenterFrameemy found and coll set to true")
+        elseif u2.type == "centerFrame" and Core.status == INGAME then
             u2.collisionHappened = true
-            -- print("centerFrame found and coll set to true")
+            print("centerFrame found and coll set to true")
         end
         if u1.type == "enemy" then
             u1:destroy()
