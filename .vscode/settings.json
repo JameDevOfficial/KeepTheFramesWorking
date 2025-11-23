@@ -1,9 +1,0 @@
-{
-    "conventionalCommits.scopes": [
-        "core",
-        "ui",
-        "centerFrame",
-        "player",
-        "enemy"
-    ]
-}
