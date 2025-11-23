@@ -72,7 +72,10 @@ function player:shoot(dt)
 
     function projectile:destroy()
         if self.body then
-            self.body:destroy()
+            pcall(function()
+                self.collision:setUserData(nil)
+                self.collision:destroy()
+            end)
             self.body = nil
         end
         for i, p in ipairs(player.projectiles) do

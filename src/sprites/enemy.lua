@@ -16,10 +16,10 @@ local enemyFonts = {
 function M:new(opts)
     opts             = opts or {}
     local o          = setmetatable({}, self)
-    o.type           = "enemy"
-    o.scale          = opts.scale or math.random(1, 8)
     local brightness = opts.brightness or 1
     local saturation = math.random(10, 70) / 100
+    o.type           = "enemy"
+    o.scale          = opts.scale or math.random(1, 8)
     o.color          = opts.color or { saturation, 1, saturation, brightness }
     if not opts.position then
         local randPos = math.random(1, 2)
@@ -31,6 +31,7 @@ function M:new(opts)
     else
         o.position = opts.position
     end
+    o.distance       = 1
     o.rotation       = opts.rotation or 0
     o.offset         = opts.offset or { x = 0, y = 0 }
     local textLength = math.random(4, 10) + math.floor(Player.points / Settings.enemy.harderDelay)
@@ -47,6 +48,11 @@ function M:new(opts)
             angle = angle + math.pi
         end
         o.body:setAngle(angle)
+
+        local ex, ey = o.body:getPosition()
+        local cx, cy = Core.centerFrame.body:getPosition()
+        local dx, dy = ex - cx, ey - cy
+        o.distance = math.sqrt(dx * dx + dy * dy)
 
         local targetX = Core.screen.centerX
         local targetY = Core.screen.centerY
@@ -75,7 +81,13 @@ function M:render()
     local oldFont = love.graphics.getFont()
     love.graphics.setFont(enemyFonts[self.scale])
     local w, h = enemyFonts[self.scale]:getWidth(self.text), enemyFonts[self.scale]:getHeight()
-    love.graphics.print(self.text, -w / 2, -h / 2)
+    local s = 1
+    if Core.status ~= INGAME then
+        s = 0.5 + (self.distance / (Core.screen.X / 2) + self.distance / (Core.screen.Y / 2)) / 2
+    end
+    local drawX = -w / 2 * s
+    local drawY = -h / 2 * s
+    love.graphics.print(self.text, drawX, drawY, 0, s, s)
     if Settings.DEBUG then
         love.graphics.setColor(1, 0, 0, 1)
         love.graphics.line(-10, 0, 10, 0, 0, 0, 0, 10, 0, -10)
@@ -91,6 +103,10 @@ function M:update()
         self.collisionHappened = nil
         if not self.body then return end
     end
+    local ex, ey = self.body:getPosition()
+    local cx, cy = Core.centerFrame.body:getPosition()
+    local dx, dy = ex - cx, ey - cy
+    self.distance = math.sqrt(dx * dx + dy * dy)
 end
 
 function M:handleCollision()

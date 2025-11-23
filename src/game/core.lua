@@ -11,6 +11,7 @@ INGAME = 12
 Core.enemies = {}
 
 Core.reset = function()
+    Player.points = 0
     for i, e in pairs(Core.enemies) do
         e:destroy()
     end
