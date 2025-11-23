@@ -5,6 +5,7 @@ local font30 = love.graphics.newFont(30)
 local font50 = love.graphics.newFont(50)
 local titleFont = love.graphics.newFont(Settings.fonts.quirkyRobot, 128, "normal", love.graphics.getDPIScale())
 local textFont = love.graphics.newFont(Settings.fonts.semiCoder, 32, "normal", love.graphics.getDPIScale())
+local textFontBig = love.graphics.newFont(Settings.fonts.semiCoder, 46, "normal", love.graphics.getDPIScale())
 
 titleFont:setFilter("nearest", "nearest")
 textFont:setFilter("nearest", "nearest")
@@ -42,6 +43,8 @@ UI.draw = function()
         UI.drawMenu()
     elseif Core.status == INGAME then
         UI.drawGame()
+    elseif Core.status == INHELP then
+        UI.drawHelp()
     end
 
     if Settings.DEBUG then
@@ -53,6 +56,30 @@ UI.drawGame = function()
     for i, enemy in ipairs(Core.enemies) do
         enemy:render()
     end
+end
+
+UI.drawHelp = function()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(textFontBig)
+    local currentY = 100
+
+    local text = string.format("Gameplay: ")
+    local width = textFont:getWidth(text)
+    local height = textFont:getHeight()
+    love.graphics.print(text, (Core.screen.X - width) / 2, currentY)
+    currentY = currentY + height + 10
+
+    love.graphics.setFont(textFont)
+    local text = string.format(
+        "Shoot at the malware with your mouse and don't get hit.\nIf you get hit too often, you will loose your FPS.\nIf your FPS fall below 1, the game will end.\nTry surviving as long as possible.\nGood Luck! ~ Jame")
+    local width = textFont:getWidth(text)
+    local height = textFont:getHeight()
+    love.graphics.print(text, (Core.screen.X - width) / 2, currentY)
+    currentY = currentY + height
+
+    text = "Press any key to return"
+    width = textFont:getWidth(text)
+    love.graphics.print(text, (Core.screen.X - width) / 2, (Core.screen.centerY - height) * 2)
 end
 
 UI.drawMenu = function()
@@ -71,7 +98,7 @@ UI.drawMenu = function()
     local height = textFont:getHeight()
     love.graphics.print(text, (Core.screen.X - width) / 2, Core.screen.centerY - 100)
 
-    text = "Press 'enter' to start"
+    text = "Press 'enter' to start - 'h' for help"
     love.graphics.setFont(textFont)
     love.graphics.setColor(1, 1, 1)
     width = textFont:getWidth(text)

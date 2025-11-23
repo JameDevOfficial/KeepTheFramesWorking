@@ -3,6 +3,7 @@ local Core = {}
 EXITED = -1
 PAUSED = 0
 LOADING = 1
+INHELP = 5
 -- Below are all fine during game
 INMENU = 11
 INGAME = 12
@@ -56,12 +57,19 @@ Core.keypressed = function(key, scancode, isrepeat)
     if key == "f5" then
         Settings.DEBUG = not Settings.DEBUG
     end
-
+    if Core.status == INHELP then
+        Core.status = INMENU
+        return
+    end
     if Core.status == INMENU then
         if key == "return" then
             Core.status = INGAME
         end
+        if key == "h" or key == "H" then
+            Core.status = INHELP
+        end
     end
+
     if Core.status == INGAME then
         if key == "space" then
             Core.player:shoot(love.timer.getDelta())
@@ -80,7 +88,7 @@ function Core.beginContact(a, b, coll)
     local u2 = b:getUserData()
     local t1 = u1 and u1.type
     local t2 = u2 and u2.type
-    print(t1, t2)
+    --print(t1, t2)
 
     if (t1 == "projectile" and t2 == "enemy") or
         (t2 == "projectile" and t1 == "enemy") then

@@ -67,7 +67,6 @@ function M:update(dt)
         self.fixture = love.physics.newFixture(self.body, love.physics.newCircleShape(self.size.w * self.scale / 2))
         self.fixture:setUserData(self)
         self.fixture:setFilterData(Settings.collision.centerFrame, Settings.collision.enemy, 0)
-        print("rescaled")
     end
     self.rescaleTimer = self.rescaleTimer + dt
     love.timer.sleep(self.sleepPerSecond * dt) -- this is supposed to produce lag

@@ -3,7 +3,6 @@ local M = {}
 M.__index = M
 
 local enemyFont = love.graphics.newFont(Settings.fonts.courierPrimeCode, 30, "normal", love.graphics.getDPIScale())
-print(enemyFont:getLineHeight())
 function M:new(opts)
     opts    = opts or {}
     local o = setmetatable({}, self)
