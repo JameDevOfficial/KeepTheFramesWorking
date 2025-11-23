@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="demo.gif" height=400 width=600 alt="thumbnail"/> 
+<img src="demo.mp4" height=400 width=600 alt="thumbnail"/> 
 
 Keep the Frames working is a 2d game i made using lua and löve2d. The goal of this game is to survive as long as possible against some evil malware, that decreases your FPS every time it hits you. It may not impact you on the first few hits, but be careful, as soon as you feel it, it's too late.
 
 [![KeepTheFramesWorking](https://hackatime-badge.hackclub.com/U087BUC6ZFW/KeepTheFramesWorking?logo=hackclub&logoColor=white)](https://hackatime-badge.hackclub.com/U087BUC6ZFW/KeepTheFramesWorking) 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Commits](https://img.shields.io/github/commit-activity/t/JameDevOfficial/Asteroids?label=Commits&color=F28C28&logo=git&logoColor=white)](https://github.com/JameDevOfficial/KeepTheFramesWorking/commits/main)
+[![Commits](https://img.shields.io/github/commit-activity/t/JameDevOfficial/KeepTheFramesWorking?label=Commits&color=F28C28&logo=git&logoColor=white)](https://github.com/JameDevOfficial/KeepTheFramesWorking/commits/main)
 <br />
 [![pages-build-deployment](https://github.com/JameDevOfficial/KeepTheFramesWorking/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/JameDevOfficial/KeepTheFramesWorking/actions/workflows/pages/pages-build-deployment)
 </div>
@@ -29,7 +29,7 @@ Keep the Frames working is a 2d game i made using lua and löve2d. The goal of t
 - Decreasing FPS
 
 # Run
-- Play the game on https://example.com 
+- Play the game on https://frames.jamedev.top 
 - Download the executeables from the latest release (Windows)
 - Download the .love file from the latest release and run via love (System independet)
 - Build it yourself 
