@@ -49,7 +49,7 @@ function M:new(opts)
         o.shape = love.physics.newRectangleShape(w, h)
         o.fixture = love.physics.newFixture(o.body, o.shape)
         o.fixture:setUserData(o)
-        o.fixture:setFilterData(Settings.collision.enemy, Settings.collision.projectile, 0)
+o.fixture:setFilterData(Settings.collision.enemy, Settings.collision.projectile + Settings.collision.centerFrame, 0)
     end
     return o
 end

@@ -45,6 +45,9 @@ function M:new(opts)
         o.mesh = love.graphics.newMesh(points * 2 + 2, "fan", "static")
         o.mesh:setVertices(o.shape)
         o.body:setAngle(o.rotation)
+        o.fixture = love.physics.newFixture(o.body, love.physics.newCircleShape(outerRadius))
+        o.fixture:setUserData(o)
+        o.fixture:setFilterData(Settings.collision.centerFrame, Settings.collision.enemy, 0)
     end
     return o
 end

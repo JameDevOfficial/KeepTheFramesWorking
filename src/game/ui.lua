@@ -15,7 +15,7 @@ font50:setFilter("nearest", "nearest")
 UI.draw = function()
     Core.player:render()
     Core.centerFrame:render()
-
+    love.graphics.setFont(textFont)
     -- FPS Label
     local fps = love.timer.getFPS()
     if fps < 1 / love.timer.getAverageDelta() then
@@ -42,6 +42,10 @@ UI.draw = function()
         UI.drawMenu()
     elseif Core.status == INGAME then
         UI.drawGame()
+    end
+
+    if Settings.DEBUG then
+        UI.drawDebug()
     end
 end
 
@@ -73,6 +77,89 @@ UI.drawMenu = function()
     width = textFont:getWidth(text)
     local height = textFont:getHeight()
     love.graphics.print(text, (Core.screen.X - width) / 2, (Core.screen.centerY - height) * 2)
+end
+
+UI.drawDebug = function()
+    if Settings.DEBUG == true then
+        love.graphics.setFont(fontDefault)
+
+        local y = fontDefault:getHeight() + 10
+
+        love.graphics.setColor(1, 0.1, 0.1)
+        love.graphics.print("Disable (F5) Debug Mode for more FPS")
+        y = y + fontDefault:getHeight()
+
+        love.graphics.setColor(1, 1, 1, 1)
+        -- FPS
+        local fps = love.timer.getFPS()
+        local fpsText = string.format("FPS: %d", fps)
+        love.graphics.print(fpsText, 10, y)
+        y = y + fontDefault:getHeight()
+
+        -- Performance
+        local stats = love.graphics.getStats()
+        local usedMem = collectgarbage("count")
+        local perfText = string.format(
+            "Memory: %.2f MB\n" ..
+            "GC Pause: %d%%\n" ..
+            "Draw Calls: %d\n" ..
+            "Canvas Switches: %d\n" ..
+            "Texture Memory: %.2f MB\n" ..
+            "Images: %d\n" ..
+            "Fonts: %d\n",
+            usedMem / 1024,
+            collectgarbage("count") > 0 and collectgarbage("count") / 7 or 0,
+            stats.drawcalls,
+            stats.canvasswitches,
+            stats.texturememory / 1024 / 1024,
+            stats.images,
+            stats.fonts
+        )
+        love.graphics.print(perfText, 10, y)
+        y = y + fontDefault:getHeight() * 8
+
+        -- Game
+        local dt = love.timer.getDelta()
+        local avgDt = love.timer.getAverageDelta()
+        local projCount = (Player and Player.ship and Player.ship.projectiles and type(Player.ship.projectiles) == "table") and
+            #Player.ship.projectiles or 0
+        local numComets = (type(Core.enemies) == "table") and #Core.enemies or 0
+        local posX, posY = 0, 0
+        local velX, velY = 0, 0
+        local shipAngle = 0
+        if Player and Player.ship and Player.ship.body then
+            posX, posY = Player.ship.body:getPosition()
+            velX, velY = Player.ship.body:getLinearVelocity()
+            shipAngle = Player.ship.body:getAngle()
+        end
+        local playerText = string.format(
+            "Game state: %s\n" ..
+            "Delta Time: %.4fs (%.1f ms)\n" ..
+            "Avg Delta: %.4fs (%.1f ms)\n" ..
+            "Time: %.2fs\n" ..
+            "Enemies: %d\n" ..
+            "Projectiles: %d\n" ..
+            "Player Rotation: %f",
+            tostring(Core.status),
+            dt, dt * 1000,
+            avgDt, avgDt * 1000,
+            love.timer.getTime(),
+            numComets,
+            projCount,
+            shipAngle
+        )
+        love.graphics.print(playerText, 10, y)
+        y = y + fontDefault:getHeight() * 8
+
+        -- System Info
+        local renderer = love.graphics.getRendererInfo and love.graphics.getRendererInfo() or ""
+        local systemText = string.format(
+            "OS: %s\nGPU: %s",
+            love.system.getOS(),
+            select(4, love.graphics.getRendererInfo()) or 0
+        )
+        love.graphics.print(systemText, 10, y)
+    end
 end
 
 UI.windowResized = function()
