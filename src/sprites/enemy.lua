@@ -2,12 +2,22 @@
 local M = {}
 M.__index = M
 
-local enemyFont = love.graphics.newFont(Settings.fonts.courierPrimeCode, 30, "normal", love.graphics.getDPIScale())
+local enemyFonts = {
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 28),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 30),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 32),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 34),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 36),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 38),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 40),
+    love.graphics.newFont(Settings.fonts.courierPrimeCode, 42),
+}
+
 function M:new(opts)
     opts    = opts or {}
     local o = setmetatable({}, self)
     o.type  = "enemy"
-    o.scale = opts.scale or math.random(0.5, 2)
+    o.scale = opts.scale or math.random(1, 8)
     o.color = opts.color or { 0.7, 1, 0.7, 1 }
     if not opts.position then
         local randPos = math.random(1, 2)
@@ -40,15 +50,16 @@ function M:new(opts)
         local targetY = Core.screen.centerY
         local angle = math.atan2(targetY - o.position.y, targetX - o.position.x)
         local speed = math.random(Settings.enemy.speed - Settings.enemy.speedOffset,
-        Settings.enemy.speed + Settings.enemy.speedOffset)
+            Settings.enemy.speed + Settings.enemy.speedOffset)
         o.body:setLinearVelocity(math.cos(angle) * speed, math.sin(angle) * speed)
 
-        local w = enemyFont:getWidth(o.text)
-        local h = enemyFont:getHeight()
+        local w = enemyFonts[o.scale]:getWidth(o.text)
+        local h = enemyFonts[o.scale]:getHeight()
         o.shape = love.physics.newRectangleShape(w, h)
         o.fixture = love.physics.newFixture(o.body, o.shape)
         o.fixture:setUserData(o)
-o.fixture:setFilterData(Settings.collision.enemy, Settings.collision.projectile + Settings.collision.centerFrame, 0)
+        o.fixture:setFilterData(Settings.collision.enemy, Settings.collision.projectile + Settings.collision.centerFrame,
+        0)
     end
     return o
 end
@@ -60,8 +71,8 @@ function M:render()
     love.graphics.rotate(self.body:getAngle())
     love.graphics.setColor(self.color)
     local oldFont = love.graphics.getFont()
-    love.graphics.setFont(enemyFont)
-    local w, h = enemyFont:getWidth(self.text), enemyFont:getHeight()
+    love.graphics.setFont(enemyFonts[self.scale])
+    local w, h = enemyFonts[self.scale]:getWidth(self.text), enemyFonts[self.scale]:getHeight()
     love.graphics.print(self.text, -w / 2, -h / 2)
     if Settings.DEBUG then
         love.graphics.setColor(1, 0, 0, 1)
