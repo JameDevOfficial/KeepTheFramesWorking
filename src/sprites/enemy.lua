@@ -22,7 +22,7 @@ function M:new(opts)
     end
     o.rotation       = opts.rotation or 0
     o.offset         = opts.offset or { x = 0, y = 0 }
-    local textLength = math.random(4, 10)
+    local textLength = math.random(4, 10) + math.floor(Player.points / Settings.enemy.harderDelay)
     o.text           = ""
     for i = 1, textLength, 1 do
         o.text = o.text .. math.random(0, 1)
@@ -40,7 +40,9 @@ function M:new(opts)
         local targetX = Core.screen.centerX
         local targetY = Core.screen.centerY
         local angle = math.atan2(targetY - o.position.y, targetX - o.position.x)
-        o.body:setLinearVelocity(math.cos(angle) * Settings.enemy.speed, math.sin(angle) * Settings.enemy.speed)
+        local speed = math.random(Settings.enemy.speed - Settings.enemy.speedOffset,
+        Settings.enemy.speed + Settings.enemy.speedOffset)
+        o.body:setLinearVelocity(math.cos(angle) * speed, math.sin(angle) * speed)
 
         local w = enemyFont:getWidth(o.text)
         local h = enemyFont:getHeight()
@@ -72,7 +74,35 @@ function M:render()
 end
 
 function M:update()
+    if self.collisionHappened then
+        self:handleCollision()
+        self.collisionHappened = nil
+        if not self.body then return end
+    end
+end
 
+function M:handleCollision()
+    self:destroy()
+end
+
+function M:destroy()
+    if self.collision then
+        self.collision:destroy()
+        self.collision = nil
+    end
+    if self.body then
+        self.body:destroy()
+        self.body = nil
+    end
+
+    if Core.enemies then
+        for i = 1, #Core.enemies do
+            if Core.enemies[i] == self then
+                table.remove(Core.enemies, i)
+                break
+            end
+        end
+    end
 end
 
 function M:spawnRandom(dt)

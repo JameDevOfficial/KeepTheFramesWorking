@@ -10,14 +10,15 @@ INGAME = 12
 Core.enemies = {}
 
 Core.reset = function()
-    -- to be impleneted
+    -- to be implemented
 end
 
 Core.load = function()
+    math.randomseed(os.time())
     Core.status = LOADING
 
     Core.world = love.physics.newWorld(0, 0, true)
-    Core.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
+    Core.world:setCallbacks(Core.beginContact, Core.endContact, Core.preSolve, Core.postSolve)
     Core.screen = UI.windowResized()
     Core.player = Player:new({ color = Settings.player.color, world = Core.world })
     Core.centerFrame = CF:new({ world = Core.world })
@@ -63,20 +64,23 @@ Core.mousepressed = function(x, y, button, istouch, presses)
     end
 end
 
-local function beginContact(a, b, coll)
+function Core.beginContact(a, b, coll)
+    print("Collision")
     local u1 = a:getUserData()
     local u2 = b:getUserData()
     local t1 = u1 and u1.type
     local t2 = u2 and u2.type
+    print(t1, t2)
 
-    if (t1 == "projectile" and t2 == "centerFrame") or
-        (t2 == "projectile" and t1 == "centerFrame") then
-        if u1.type == "centerFrame" then
+    if (t1 == "projectile" and t2 == "enemy") or
+        (t2 == "projectile" and t1 == "enemy") then
+        print("Collision type 1")
+        if u1.type == "enemy" then
             u1.collisionHappened = true
-            print("centerFrame found and coll set to true")
-        elseif u2.type == "centerFrame" then
+            print("enemy found and coll set to true")
+        elseif u2.type == "enemy" then
             u2.collisionHappened = true
-            print("centerFrame found and coll set to true")
+            print("enemy found and coll set to true")
         end
         if u1.type == "projectile" then
             u1:destroy()
@@ -86,20 +90,19 @@ local function beginContact(a, b, coll)
     end
 end
 
-local function endContact(a, b, coll)
+function Core.endContact(a, b, coll)
     local u1 = a:getUserData()
     local u2 = b:getUserData()
 end
 
-local function preSolve(a, b, coll)
+function Core.preSolve(a, b, coll)
     local u1 = a:getUserData()
     local u2 = b:getUserData()
 end
 
-local function postSolve(a, b, coll, normalimpulse, tangentimpulse)
+function Core.postSolve(a, b, coll, normalimpulse, tangentimpulse)
     local u1 = a:getUserData()
     local u2 = b:getUserData()
 end
-
 
 return Core

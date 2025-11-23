@@ -1,7 +1,6 @@
 local M = {}
 M.__index = M
 
-
 -- "fan" mode starts with first point in the center, last point connects back to first point (not center point)
 local function createStarVertices(cx, cy, outerRadius, innerRadius, points)
     local vertices = {}
