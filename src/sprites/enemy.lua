@@ -3,11 +3,12 @@ local M = {}
 M.__index = M
 
 local enemyFont = love.graphics.newFont(Settings.fonts.courierPrimeCode, 30, "normal", love.graphics.getDPIScale())
+print(enemyFont:getLineHeight())
 function M:new(opts)
     opts    = opts or {}
     local o = setmetatable({}, self)
     o.type  = "enemy"
-    o.size  = opts.size or Settings.player.size
+    o.scale = opts.scale or math.random(0.5, 2)
     o.color = opts.color or { 0.7, 1, 0.7, 1 }
     if not opts.position then
         local randPos = math.random(1, 2)
@@ -30,21 +31,23 @@ function M:new(opts)
     if opts.world then
         o.body = love.physics.newBody(opts.world, o.position.x, o.position.y, "dynamic")
         local angle = math.atan2(Core.screen.centerY - o.position.y, Core.screen.centerX - o.position.x)
-        -- Normalize angle to [-pi, pi]
         angle = (angle + math.pi) % (2 * math.pi) - math.pi
-        -- Flip text if upside down
         if angle > math.pi / 2 or angle < -math.pi / 2 then
             angle = angle + math.pi
         end
         o.body:setAngle(angle)
 
-
-
         local targetX = Core.screen.centerX
         local targetY = Core.screen.centerY
         local angle = math.atan2(targetY - o.position.y, targetX - o.position.x)
         o.body:setLinearVelocity(math.cos(angle) * Settings.enemy.speed, math.sin(angle) * Settings.enemy.speed)
-        --o.body:setAngularVelocity(math.random(-1, 1))
+
+        local w = enemyFont:getWidth(o.text)
+        local h = enemyFont:getHeight()
+        o.shape = love.physics.newRectangleShape(w, h)
+        o.fixture = love.physics.newFixture(o.body, o.shape)
+        o.fixture:setUserData(o)
+        o.fixture:setFilterData(Settings.collision.enemy, Settings.collision.projectile, 0)
     end
     return o
 end
