@@ -118,11 +118,11 @@ function player:render()
     end
 end
 
-function player:destroy()
-    if self.body then
-        self.body:destroy()
-        self.body = nil
+function player:destroyProjectiles()
+    for i, p in ipairs(self.projectiles) do
+        p:destroy()
     end
+    self.projectiles = {}
 end
 
 function player:update(dt)

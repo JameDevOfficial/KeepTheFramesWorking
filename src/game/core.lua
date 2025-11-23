@@ -10,7 +10,12 @@ INGAME = 12
 Core.enemies = {}
 
 Core.reset = function()
-    -- to be implemented
+    for i, e in pairs(Core.enemies) do
+        e:destroy()
+    end
+    Core.enemies = {}
+    Core.player:destroyProjectiles()
+    math.randomseed(os.time())
 end
 
 Core.load = function()
@@ -27,6 +32,11 @@ Core.load = function()
 end
 
 Core.update = function(dt)
+    if dt > 1 / Settings.centerFrame.criticalFPS then
+        Core.centerFrame.sleepPerSecond = 0
+        Core.status = INMENU
+        Core.reset()
+    end
     Core.world:update(dt)
     Core.centerFrame:update(dt)
     Core.player:update(dt)
@@ -65,7 +75,7 @@ Core.mousepressed = function(x, y, button, istouch, presses)
 end
 
 function Core.beginContact(a, b, coll)
-    print("Collision")
+    --print("Collision")
     local u1 = a:getUserData()
     local u2 = b:getUserData()
     local t1 = u1 and u1.type
@@ -74,17 +84,34 @@ function Core.beginContact(a, b, coll)
 
     if (t1 == "projectile" and t2 == "enemy") or
         (t2 == "projectile" and t1 == "enemy") then
-        print("Collision type 1")
+        --print("Collision type 1")
         if u1.type == "enemy" then
             u1.collisionHappened = true
-            print("enemy found and coll set to true")
+            --print("enemy found and coll set to true")
         elseif u2.type == "enemy" then
             u2.collisionHappened = true
-            print("enemy found and coll set to true")
+            --print("enemy found and coll set to true")
         end
         if u1.type == "projectile" then
             u1:destroy()
         elseif u2.type == "projectile" then
+            u2:destroy()
+        end
+    end
+
+    if (t1 == "centerFrame" and t2 == "enemy") or
+        (t2 == "centerFrame" and t1 == "enemy") then
+        --print("Collision type 2")
+        if u1.type == "centerFrame" then
+            u1.collisionHappened = true
+            -- print("encenterFrameemy found and coll set to true")
+        elseif u2.type == "centerFrame" then
+            u2.collisionHappened = true
+            -- print("centerFrame found and coll set to true")
+        end
+        if u1.type == "enemy" then
+            u1:destroy()
+        elseif u2.type == "enemy" then
             u2:destroy()
         end
     end

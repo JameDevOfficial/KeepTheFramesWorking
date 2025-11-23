@@ -107,7 +107,7 @@ end
 
 function M:spawnRandom(dt)
     self.spawnTimer = self.spawnTimer and self.spawnTimer + dt or 0 + dt
-    if self.spawnTimer < Settings.enemy.spawnDelay then
+    if self.spawnTimer < Settings.enemy.spawnDelay / (math.floor(Player.points / Settings.enemy.harderDelay) + 1) then
         return
     end
     self.spawnTimer = 0

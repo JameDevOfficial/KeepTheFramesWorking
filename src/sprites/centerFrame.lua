@@ -31,6 +31,8 @@ function M:new(opts)
     o.colorIndex        = 1
     o.colorChangeSpeed  = opts.colorChangeSpeed or 1
     o.gradientDirection = 1
+    o.sleepPerSecond    = 0
+    o.rescaleTimer = 0
 
     local w_2           = o.size.w / 2
     local h_2           = o.size.h / 2
@@ -53,6 +55,22 @@ function M:new(opts)
 end
 
 function M:update(dt)
+    if self.collisionHappened then
+        self.sleepPerSecond = self.sleepPerSecond + Settings.centerFrame.sleepStep
+        self.collisionHappened = false
+    end
+    if self.rescaleTimer >= Settings.centerFrame.rescaleDelay then
+        self.rescaleTimer = 0
+        if self.fixture then
+            self.fixture:destroy()
+        end
+        self.fixture = love.physics.newFixture(self.body, love.physics.newCircleShape(self.size.w * self.scale / 2))
+        self.fixture:setUserData(self)
+        self.fixture:setFilterData(Settings.collision.centerFrame, Settings.collision.enemy, 0)
+        print("rescaled")
+    end
+    self.rescaleTimer = self.rescaleTimer + dt
+    love.timer.sleep(self.sleepPerSecond * dt) -- this is supposed to produce lag
     self.body:setAngle(self.body:getAngle() + self.rotationSpeed * dt)
 
     local speed = self.colorChangeSpeed * dt

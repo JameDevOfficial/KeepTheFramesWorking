@@ -17,6 +17,9 @@ M.enemy.harderDelay = 30 -- in s
 
 M.centerFrame = {}
 M.centerFrame.size = { w = 40, h = 40 }
+M.centerFrame.sleepStep = 0.1
+M.centerFrame.criticalFPS = 1 -- game stops at x FPS
+M.centerFrame.rescaleDelay = 0.25
 
 M.fonts = {}
 M.fonts.quirkyRobot = "assets/fonts/QuirkyRobot.ttf"
