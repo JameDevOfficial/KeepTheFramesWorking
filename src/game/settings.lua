@@ -1,6 +1,6 @@
 local M = {}
 
-M.DEBUG = true
+M.DEBUG = false
 
 M.player = {}
 M.player.size = { w = 50, h = 50 }

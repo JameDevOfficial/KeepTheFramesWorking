@@ -11,7 +11,6 @@ INGAME = 12
 Core.enemies = {}
 
 Core.reset = function()
-    Player.points = 0
     for i, e in pairs(Core.enemies) do
         e:destroy()
     end
@@ -88,6 +87,7 @@ Core.keypressed = function(key, scancode, isrepeat)
         if key == "return" then
             Core.reset()
             Core.status = INGAME
+            Player.points = 0
         end
         if key == "h" or key == "H" then
             Core.status = INHELP

@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="src/assets/demo.gif" height=400 width=600 alt="thumbnail"/> 
+<img src="demo.gif" height=400 width=600 alt="thumbnail"/> 
 
 Keep the Frames working is a 2d game i made using lua and löve2d. The goal of this game is to survive as long as possible against some evil malware, that decreases your FPS every time it hits you. It may not impact you on the first few hits, but be careful, as soon as you feel it, it's too late.
 
