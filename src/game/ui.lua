@@ -46,7 +46,9 @@ UI.draw = function()
 end
 
 UI.drawGame = function()
-
+    for i, enemy in ipairs(Core.enemies) do
+        enemy:render()
+    end
 end
 
 UI.drawMenu = function()

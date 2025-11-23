@@ -7,6 +7,8 @@ LOADING = 1
 INMENU = 11
 INGAME = 12
 
+Core.enemies = {}
+
 Core.reset = function()
     -- to be impleneted
 end
@@ -27,8 +29,14 @@ Core.update = function(dt)
     Core.centerFrame:update(dt)
     Core.player:update(dt)
 
+
     if Core.status == INGAME then
         Player.points = Player.points + dt
+        local enemy = Enemy:spawnRandom(dt)
+        if enemy then table.insert(Core.enemies, enemy) end
+        for i, e in ipairs(Core.enemies) do
+            e:update()
+        end
     end
 end
 

@@ -27,7 +27,6 @@ function player:new(opts)
 
     if opts.world then
         o.body = love.physics.newBody(opts.world, o.position.x, o.position.y, "dynamic")
-        o.body:setLinearDamping(o.damping)
         o.body:setAngle(o.rotation)
     end
     return o
@@ -87,8 +86,8 @@ function player:shoot(dt)
     local angle = self.body:getAngle()
     projectile.body:setAngle(angle)
 
-    local forceX = math.cos(angle) * Settings.player.projectileSpeed * dt
-    local forceY = math.sin(angle) * Settings.player.projectileSpeed * dt
+    local forceX = math.cos(angle) * Settings.player.projectileSpeed
+    local forceY = math.sin(angle) * Settings.player.projectileSpeed
     projectile.body:applyLinearImpulse(forceX, forceY)
 
     table.insert(self.projectiles, projectile)

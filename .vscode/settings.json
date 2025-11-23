@@ -3,6 +3,7 @@
         "core",
         "ui",
         "centerFrame",
-        "player"
+        "player",
+        "enemy"
     ]
 }
