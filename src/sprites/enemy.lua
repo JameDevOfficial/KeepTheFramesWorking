@@ -1,3 +1,4 @@
+---@diagnostic disable: deprecated
 local M = {}
 M.__index = M
 
@@ -7,7 +8,7 @@ function M:new(opts)
     local o = setmetatable({}, self)
     o.type  = "enemy"
     o.size  = opts.size or Settings.player.size
-    o.color = opts.color or { 0.8, 1, 0.8, 1 }
+    o.color = opts.color or { 0.7, 1, 0.7, 1 }
     if not opts.position then
         local randPos = math.random(1, 2)
         if randPos == 1 then
@@ -18,26 +19,37 @@ function M:new(opts)
     else
         o.position = opts.position
     end
-    o.rotation = opts.rotation or 0
-    o.offset   = opts.offset or { x = 0, y = 0 }
-    o.text     = "110101" -- placeholder
+    o.rotation       = opts.rotation or 0
+    o.offset         = opts.offset or { x = 0, y = 0 }
+    local textLength = math.random(4, 10)
+    o.text           = ""
+    for i = 1, textLength, 1 do
+        o.text = o.text .. math.random(0, 1)
+    end
 
     if opts.world then
         o.body = love.physics.newBody(opts.world, o.position.x, o.position.y, "dynamic")
-        o.body:setAngle(o.rotation)
+        local angle = math.atan2(Core.screen.centerY - o.position.y, Core.screen.centerX - o.position.x)
+        -- Normalize angle to [-pi, pi]
+        angle = (angle + math.pi) % (2 * math.pi) - math.pi
+        -- Flip text if upside down
+        if angle > math.pi / 2 or angle < -math.pi / 2 then
+            angle = angle + math.pi
+        end
+        o.body:setAngle(angle)
+
+
 
         local targetX = Core.screen.centerX
         local targetY = Core.screen.centerY
-        ---@diagnostic disable-next-line: deprecated
         local angle = math.atan2(targetY - o.position.y, targetX - o.position.x)
         o.body:setLinearVelocity(math.cos(angle) * Settings.enemy.speed, math.sin(angle) * Settings.enemy.speed)
-        o.body:setAngularVelocity(math.random(-1, 1))
+        --o.body:setAngularVelocity(math.random(-1, 1))
     end
     return o
 end
 
 function M:render()
-    print("Rendering enemy")
     love.graphics.push();
     love.graphics.setLineWidth(2)
     love.graphics.translate(self.body:getX() + self.offset.x, self.body:getY() + self.offset.y)
@@ -45,10 +57,11 @@ function M:render()
     love.graphics.setColor(self.color)
     local oldFont = love.graphics.getFont()
     love.graphics.setFont(enemyFont)
-    love.graphics.print(self.text)
+    local w, h = enemyFont:getWidth(self.text), enemyFont:getHeight()
+    love.graphics.print(self.text, -w / 2, -h / 2)
     if Settings.DEBUG then
         love.graphics.setColor(1, 0, 0, 1)
-        love.graphics.line(0, 0, 30, 0)
+        love.graphics.line(-10, 0, 10, 0, 0, 0, 0, 10, 0, -10)
     end
 
     love.graphics.pop()
